@@ -137,11 +137,17 @@ const Attendance = async (req, resp) => {
       }
     }
   
-  
-  
-  
+  }
+
+  async function updateAttendanceReportOfUser(req,resp){
+    const{email,date,clockIn,clockOut}= req.body
+    const filter = { email, "attendance.date": date }
+    const update = { $set: { "attendance.$.clockIn": clockIn,"attendance.$.clockOut":clockOut } };
+    const result = await attendanceSchema.updateOne(filter, update);
+    console.log('Filtered attendance:', result);
+    resp.json({ message:"record updated", result });
   }
 
 
 
-  module.exports={Attendance,getMonthReport};
+  module.exports={Attendance,getMonthReport,updateAttendanceReportOfUser};
